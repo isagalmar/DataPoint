@@ -24,12 +24,20 @@ for pacienteId, fecha_inicio, fecha_fin, SNOMED, descripcion in pd.read_csv("./d
     data.append(Condicion(pacienteId, fecha_inicio, fecha_fin, SNOMED, descripcion))
 
 
-@router.get("/getAllCondiciones")
-def getAllCondiciones():
+@router.get("/")
+def getAllCondiciones(fecha_inicio:datetime.datetime = None, fecha_fin:datetime.datetime = None, snomed:str = ""):
+    res = [condicion for condicion in data if (condicion.fecha_inicio == fecha_inicio or fecha_inicio == None) 
+                                        and (condicion.fecha_fin == fecha_fin or fecha_fin == None) 
+                                        and (condicion.SNOMED == snomed or snomed == "")]
+
+
     return {"message":"Todas las alergias registradas", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": data}
 
-@router.get("/getCondicionesPaciente/{pacienteId}")
-def getCondicionesPaciente(pacienteId:int):
-    res = [ condiciones for condiciones in data if condiciones.pacienteId == pacienteId]
+@router.get("/{pacienteId}")
+def getCondicionesPaciente(pacienteId:int, fecha_inicio:datetime.datetime = None, fecha_fin:datetime.datetime = None, snomed:str = ""):
+    res = [condicion for condicion in data if condicion.pacienteId == pacienteId
+                                        and (condicion.fecha_inicio == fecha_inicio or fecha_inicio == None) 
+                                        and (condicion.fecha_fin == fecha_fin or fecha_fin == None) 
+                                        and (condicion.SNOMED == snomed or snomed == "")]
     
     return {"message":"Las condiciones del paciente son:", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": res}

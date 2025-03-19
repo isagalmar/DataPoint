@@ -30,11 +30,11 @@ for pacienteId, fecha_inicio, fecha_fin, codigo, nombre, dosis, frecuencia, via 
     data.append(Medicacion(pacienteId, fecha_inicio, fecha_fin, codigo, nombre, dosis, frecuencia, via))
 
 
-@router.get("/getAllMedicaciones")
+@router.get("/")
 def getAllMedicaciones():
     return {"message":"Todas las medicaciones registradas", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": data}
 
-@router.get("/getMedicacionPaciente/{pacienteId}")
+@router.get("/{pacienteId}")
 def getMedicacionPaciente(pacienteId:int):
     res = [ medicacion for medicacion in data if medicacion.pacienteId == pacienteId]
     

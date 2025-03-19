@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime
 from fastapi import routing
+from urllib.parse import unquote
 
 class Paciente():
     def __init__(self, pacienteId, genero, edad, provincia, latitud, longitud):
@@ -28,19 +29,21 @@ for pacienteId, genero, edad, provincia, latitud, longitud in pd.read_csv("./dat
 
 
 
-@router.get("/getAllPacientes")
-def getAllAlergias():
-    return {"message":"Todos los pacientes registrados", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": data}
+@router.get("/")
+def getAllAlergias(provincia:str = "", genero:str = "", edad:int = 0):
+    
+    res = [paciente for paciente in data if (paciente.provincia == provincia or provincia == "") 
+                                        and (paciente.genero == genero or genero == "") 
+                                        and (paciente.edad == edad or edad <= 0)]
+
+    return {"message":"Todos los pacientes registrados", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": res}
 
 
-@router.get("/getPacientePorProvincia/{provincia}")
-def getPacientePorProvincia(provincia:str):
-    res = [ paciente for paciente in data if paciente.provincia == provincia]
-
-    return {"message":f"Los pacientes de {provincia} son:", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": res}
-
-@router.get("/getPacientePorId/{pacienteId}")
-def getPacientePorId(pacienteId:int):
-    res = [ paciente for paciente in data if paciente.pacienteId == pacienteId]
+@router.get("/{pacienteId}")
+def getPacientePorId(pacienteId:int, provincia:str = "", genero:str = "", edad:int = 0):
+    res = [paciente for paciente in data if paciente.pacienteId == pacienteId
+                                        and (paciente.provincia == provincia or provincia == "") 
+                                        and (paciente.genero == genero or genero == "") 
+                                        and (paciente.edad == edad or edad <= 0)]
 
     return {"message":f"El paciente de id {pacienteId} es:", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": res}

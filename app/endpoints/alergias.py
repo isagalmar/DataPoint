@@ -23,11 +23,11 @@ for pacienteId, fecha_diagnostico, SNOMED, descripcion in pd.read_csv("./data/co
     data.append(Alergia(pacienteId, fecha_diagnostico, SNOMED, descripcion))
 
 
-@router.get("/getAllAlergias")
+@router.get("/")
 def getAllAlergias():
     return {"message":"Todas las alergias registradas", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": data}
 
-@router.get("/getAlergiasPaciente/{pacienteId}")
+@router.get("/{pacienteId}")
 def getAlergia(pacienteId:int):
     res = [ alergia for alergia in data if alergia.pacienteId == pacienteId]
     

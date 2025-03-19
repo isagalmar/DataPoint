@@ -12,10 +12,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copiar todo el código de la aplicación al contenedor
 COPY app app
-COPY data .
+COPY data data
+
+ENV DATAPOINT_PORT=8007
 
 # Exponer el puerto que va a usar la aplicación (si es necesario)
-EXPOSE $DATAPOINT_PORT
+EXPOSE ${DATAPOINT_PORT}
+
 
 # Comando para ejecutar la aplicación
-CMD ["fastapi", "run", "app/main.py", "--port $DATAPOINT_PORT"]
+ENTRYPOINT fastapi run app/main.py --port $DATAPOINT_PORT

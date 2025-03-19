@@ -26,11 +26,11 @@ for pacienteId, fecha_inicio, fecha_fin, SNOMED,descripcion in pd.read_csv("./da
     data.append(Procedimiento(pacienteId, fecha_inicio, fecha_fin, SNOMED,descripcion))
 
 
-@router.get("/getAllProcedimientos")
+@router.get("/")
 def getAllProcedimientos():
     return {"message":"Todas los procedimientos registrados", "return-timestamp": int(datetime.datetime.timestamp(datetime.datetime.now())), "response": data}
 
-@router.get("/getProcedimientosPaciente/{pacienteId}")
+@router.get("/{pacienteId}")
 def getProcedimientosPaciente(pacienteId:int):
     res = [ procedimiento for procedimiento in data if procedimiento.pacienteId == pacienteId]
     
